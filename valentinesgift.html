@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Valentine Access Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #ffe6f0, #ffd6ec);
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .page {
+            display: none;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: fadeIn 1s ease forwards;
+            padding: 20px;
+        }
+
+        .active {
+            display: flex;
+        }
+
+        button {
+            padding: 12px 25px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 20px;
+            background-color: #ff4da6;
+            color: white;
+            transition: transform 0.2s ease;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            width: 250px;
+        }
+
+        #noBtn {
+            position: absolute;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        .popText {
+            animation: pop 1s ease forwards;
+        }
+
+        .hint {
+            margin-top: 15px;
+            color: #cc0066;
+            font-style: italic;
+            min-height: 24px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div id="page1" class="page active">
+    <h1>Will you be my Valentine? 💘</h1>
+    <button onclick="startQuiz()">Obviously Yes 💖</button>
+    <button id="noBtn" onmouseover="moveButton()">Absolutely Not 😤</button>
+</div>
+
+<!-- QUIZ PAGE -->
+<div id="quizPage" class="page">
+    <h2 id="questionText"></h2>
+    <input type="text" id="answerInput" placeholder="Type your answer here...">
+    <button onclick="checkAnswer()">Submit 💌</button>
+    <div id="hint" class="hint"></div>
+</div>
+
+<!-- PAGE 2 -->
+<div id="valentinePage" class="page">
+    <h1 class="popText">💖 You can be my Valentine 💖</h1>
+    <button onclick="showNote()">Unlock Final Message 🔓</button>
+</div>
+
+<!-- PAGE 3 -->
+<div id="notePage" class="page">
+    <div class="popText" style="max-width:700px;">
+        <h2>Happy Valentine’s Day, my favorite human 💖</h2>
+
+        <p>
+        I know I couldn’t be there with you, and I’m really sorry for that.
+        But I hope this tiny little project, written in your language, makes you smile the way you make me smile every day.
+        </p>
+
+        <p>
+        Maybe I’m not a coder…
+        but I’ll always try to learn the languages that matter to you.
+        </p>
+
+        <p>
+        This is just version 1.0.
+        I promise there are many more cute valentines coming for us to celebrate!
+        </p>
+
+        <h3>You got me for life. 💌</h3>
+
+        <p style="margin-top:20px; font-size:18px; font-style: italic;">
+        With love, <br>
+        Yours, Maitri ❤️
+        </p>
+    </div>
+</div>
+
+<script>
+
+let questions = [
+    { question: "What was our first special moment?", answer: "first kiss" },
+    { question: "What was my first homecooked food at your place?", answer: "pasta" },
+    { question: "Where is our first craziest memory together?", answer: "sentosa resort" }
+];
+
+let currentQuestion = 0;
+let attemptCount = 0;
+
+function moveButton() {
+    let btn = document.getElementById("noBtn");
+    btn.style.top = Math.random() * (window.innerHeight - 60) + "px";
+    btn.style.left = Math.random() * (window.innerWidth - 120) + "px";
+}
+
+function startQuiz() {
+    alert("Ohhh wait… It’s not THAT easy to become my Valentine 😌");
+
+    document.getElementById("page1").classList.remove("active");
+    document.getElementById("quizPage").classList.add("active");
+    loadQuestion();
+}
+
+function loadQuestion() {
+    document.getElementById("questionText").innerText = questions[currentQuestion].question;
+    document.getElementById("answerInput").value = "";
+    document.getElementById("hint").innerText = "";
+    attemptCount = 0;
+}
+
+function checkAnswer() {
+    let input = document.getElementById("answerInput").value.toLowerCase();
+    let correct = questions[currentQuestion].answer.toLowerCase();
+
+    if (input.includes(correct)) {
+        currentQuestion++;
+
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById("quizPage").classList.remove("active");
+            document.getElementById("valentinePage").classList.add("active");
+        }
+
+    } else {
+        attemptCount++;
+
+        if (currentQuestion === 2) {
+            if (attemptCount === 1) {
+                document.getElementById("hint").innerText =
+                "Hint: Think harder… we had one more person with us during it 😉";
+            } else if (attemptCount === 2) {
+                document.getElementById("hint").innerText =
+                "Hint: It was in the outskirts of Pune 🌄";
+            } else {
+                document.getElementById("hint").innerText =
+                "Final Hint: Type that resort’s name properly 💡";
+            }
+        } else {
+            document.getElementById("hint").innerText =
+            "Hmm… insufficient romance detected. Try again 😌";
+        }
+    }
+}
+
+function showNote() {
+    document.getElementById("valentinePage").classList.remove("active");
+    document.getElementById("notePage").classList.add("active");
+}
+
+</script>
+
+</body>
+</html>
+
